@@ -1,0 +1,30 @@
+<div class="container">
+  <p style="color: green"><%= notice %></p>
+
+  <% content_for :title, "Users" %>
+
+  <h1>Users</h1>
+
+  <div id="users">
+
+    <table class="table table-striped table-bordered mt-5">
+      <thead>
+      <tr class="bg-dark text-light">
+        <th scope="col">#</th>
+        <th scope="col">Email</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.id %></td>
+          <td><%= user.email %></td>
+        </tr>
+      <% end %>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+

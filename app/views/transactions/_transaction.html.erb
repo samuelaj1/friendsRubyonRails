@@ -1,0 +1,26 @@
+<% content_for :head do %>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AZ6oz_AE_Y698cqm7EQ1-0x68EQWEP52yFP4NdW9cFTRhZUM2zg7lUtND0Kwe6NQgnC9N6uWx65qGlef&currency=GBP"></script>
+
+<% end %>
+
+<div class="container">
+  <div id="<%= dom_id transaction %>">
+
+    <div class="jumbotron">
+      <h1 class="display-4">Hello, <%= transaction.name&.upcase %>!</h1>
+
+      <hr class="my-4">
+      <p>
+        <strong>Amount:</strong>
+        <%= transaction.amount %></p>
+
+      <p>
+        <strong>Status:</strong>
+        <span class="badge badge-info"><%= transaction.status %></span>
+      </p>
+    </div>
+
+  </div>
+</div>

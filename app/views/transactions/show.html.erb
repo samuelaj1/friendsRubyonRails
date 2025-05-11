@@ -1,0 +1,13 @@
+<% content_for :head do %>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- PayPal SDK -->
+  <script src="https://www.paypal.com/sdk/js?client-id=AZ6oz_AE_Y698cqm7EQ1-0x68EQWEP52yFP4NdW9cFTRhZUM2zg7lUtND0Kwe6NQgnC9N6uWx65qGlef&currency=GBP"></script>
+
+<% end %>
+
+<%= render @transaction %>
+
+<%= link_to "Edit this transaction", edit_transaction_path(@transaction) %> |
+<%= link_to "Back to transactions", transactions_path %>
+
+<%= button_to "Destroy this transaction", @transaction, class: "btn btn-danger", method: :delete %>

@@ -1,0 +1,117 @@
+<%# content_for :title do %>
+<!--  Home Page-->
+<%# end %>
+<!-- shorthand for content_for-->
+<% content_for :title,"Home Page" %>
+
+<%# content_for :head do %>
+<!--  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">-->
+<!--  <script src="https://www.paypal.com/sdk/js?client-id=AZ6oz_AE_Y698cqm7EQ1-0x68EQWEP52yFP4NdW9cFTRhZUM2zg7lUtND0Kwe6NQgnC9N6uWx65qGlef&currency=GBP"></script>-->
+<%# end %>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="card">
+        <div class="card-header">
+          <h1 class="text-center">University Catering Bill</h1>
+        </div>
+        <div class="card-body">
+          <form id="order-form">
+            <div class="form-group">
+              <label>Select Food Items:</label>
+              <div class="form-check">
+                <input class="form-check-input food-item" type="checkbox" value="5.00" id="item1">
+                <label class="form-check-label" for="item1">Sandwich - £5.00</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input food-item" type="checkbox" value="3.00" id="item2">
+                <label class="form-check-label" for="item2">Salad - £3.00</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input food-item" type="checkbox" value="2.50" id="item3">
+                <label class="form-check-label" for="item3">Drink - £2.50</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input food-item" type="checkbox" value="4.00" id="item4">
+                <label class="form-check-label" for="item4">Pizza Slice - £4.00</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="total-amount">Total Amount:</label>
+              <input type="text" class="form-control" id="total-amount" readonly value="£0.00">
+            </div>
+            <button type="button" class="btn btn-primary btn-block" onclick="payAtCounter()">Pay cash at Counter</button>
+            <div id="paypal-button-container" class="mt-3"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    document.querySelectorAll('.food-item').forEach(function(checkbox) {
+        checkbox.addEventListener('change', updateTotal);
+    });
+
+    function updateTotal() {
+        let total = 0;
+        const checkboxes = document.querySelectorAll('.food-item:checked');
+        checkboxes.forEach(function(checkbox) {
+            total += parseFloat(checkbox.value);
+        });
+        document.getElementById('total-amount').value = '£' + total.toFixed(2);
+        togglePayPalButton(total);
+    }
+
+    function payAtCounter() {
+        const totalAmount = document.getElementById('total-amount').value.replace('£', '');
+        if (parseFloat(totalAmount) === 0) {
+            alert("Please select at least one item before paying at the counter.");
+        } else {
+            alert("Please pay at the counter when you collect your food.");
+        }
+    }
+
+    function togglePayPalButton(total) {
+        const container = document.getElementById('paypal-button-container');
+        if (total > 0) {
+            if (container.innerHTML === '') {
+                renderPayPalButton();
+            }
+        } else {
+            container.innerHTML = ''; // Clear the container if total is zero
+        }
+    }
+
+    function renderPayPalButton() {
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                const totalAmount = document.getElementById('total-amount').value.replace('£', '');
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: totalAmount,
+                            currency_code: 'GBP'
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Transaction completed by ' + details.payer.name.given_name);
+                });
+            }
+        }).render('#paypal-button-container');
+    }
+
+    // Initial render to handle the case where items might be pre-selected
+    updateTotal();
+</script>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
